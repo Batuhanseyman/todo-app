@@ -1,9 +1,13 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
 import TodoCard from "@/components/TodoCard";
 
+const todos = [
+  {text : 'Bulaşıkları Yıka', id : 1 },
+  {text: 'Projeyi tamamla', id : 2},
+  {text : 'Yatağını topla', id : 3}
+];
 
 export default function Home() {
+
   return (
     <>
 
@@ -26,8 +30,7 @@ export default function Home() {
             px-4 py-2 rounded-r-2xl hover:bg-blue-600">Add</button>
 
           </div>
-          <TodoCard></TodoCard>
-
+        <TodoCard todos = {todos}/>
         </div>
       </div>     
     </>
