@@ -1,4 +1,5 @@
 import React from 'react'
+import { Input } from './ui/input';
 
 
 
@@ -6,6 +7,7 @@ import React from 'react'
 const TodoCard = ({todos}) => {
 
     const todoItems = todos.map(todo =>
+        <>
         <li className='text-black flex items-center p-3
         rounded-xl bg-slate-100 border boder-gray-200
         hover:bg-slate-300'
@@ -22,6 +24,9 @@ const TodoCard = ({todos}) => {
             bg-red-500 text-white hover:bg-red-700'
             >Delete</button>
         </li>
+        <Input>
+        </Input>
+    </>
     );
   return (
     <ul className='space-y-2'>
