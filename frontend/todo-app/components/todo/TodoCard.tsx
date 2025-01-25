@@ -8,8 +8,10 @@ const toDos = [
   {text : 'Bulaşıkları Yıka', id : 1 , checked : false},
   {text: 'Projeyi tamamla', id : 2, checked : false},
   {text : 'Yatağını topla', id : 3, checked : true},
-  {text : 'Deneme' , id : 4, checked : true}
+  {text : 'Deneme', id : 4, checked : false}
 ];
+
+
 
 const TodoCard = () => {
   return (
