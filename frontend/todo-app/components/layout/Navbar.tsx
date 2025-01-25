@@ -11,8 +11,8 @@ const Navbar = () => {
     <nav className='bg-gray-800 text-white p-4 sm:p-6 md:flex
     md:justify-between md:items-center'>
     <div className='container mx-auto flex justify-between items-center'>
-      <p className='text-lg font-bold'>TODO APP</p>
-      <div className= {'${isOpen ? "flex : "hidden"} flex-col md:flex-row'}>
+      <Link className='text-lg font-bold' href='/'>TODO APP</Link>
+      <div className= {`${isOpen ? 'flex' : 'hidden'} flex-col md:flex-row md:block`}>
         <Link href={'/login'} className='mx-2 hover:text-gray-300'>Sign In</Link>
         <Link href={'/register'} className='mx-2 hover:text-gray-300'>Sign up</Link>
       </div>
@@ -20,7 +20,7 @@ const Navbar = () => {
         <Button onClick={() => {
           setIsOpen(!isOpen);
         }}>
-          
+          {isOpen ? "Close" : "Menu"}
         </Button>
       </div>
 
