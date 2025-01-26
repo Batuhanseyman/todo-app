@@ -1,10 +1,26 @@
 "use client";
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useState} from 'react'
 import { Button } from '../ui/button'
+import { logoutUser } from '@/firebase/firebaseAuthService'
+import { useRouter } from 'next/navigation';
+
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    try {
+      await logoutUser(); 
+      console.log("Kullanıcı çıkışı başarılı.");
+      router.push("/login");
+
+    } catch (error) {
+      console.error("Çıkış hatası:", error);
+    }
+  };
+
 
 
   return (
@@ -15,6 +31,8 @@ const Navbar = () => {
       <div className= {`${isOpen ? 'flex' : 'hidden'} flex-col md:flex-row md:block`}>
         <Link href={'/login'} className='mx-2 hover:text-gray-300'>Sign In</Link>
         <Link href={'/register'} className='mx-2 hover:text-gray-300'>Sign up</Link>
+        <Button className="border rounded-lg bg-red-600 text-center p-2 
+         text-white hover:bg-red-700" onClick={handleSignOut}>Sign Out</Button>
       </div>
       <div className='md:hidden flex items-center'>
         <Button onClick={() => {
