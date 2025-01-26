@@ -80,7 +80,7 @@ const LoginForm = () => {
             />
             <Button type="submit" onClick={() => router.push("/todo")}>Sign in</Button>
             <div className='flex gap-2 items-center justify-items-center'><p>Create an account</p> 
-            <Link className='hover:bg-slate-800 border rounded-md border-white bg-slate-950 text-white p-1' href={'/register'}>Sign up</Link></div>
+            <Link className='hover:bg-slate-800 border rounded-md border-white bg-slate-950 text-white p-1' href='/register'>Sign up</Link></div>
         </form>
         </Form>
     </div>
