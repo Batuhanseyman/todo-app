@@ -4,6 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
+import { registerUser} from '@/firebase/firebaseAuthService'
+import handleGoogleLogin from "@/components/layout/LoginForm"
+import { useRouter } from 'next/navigation'
 import {
   Form,
   FormControl,
@@ -27,6 +30,7 @@ const formSchema = z.object({
   })
 
 const RegisterForm = () => {
+   const router = useRouter();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -36,10 +40,13 @@ const RegisterForm = () => {
           password: ""
         },
       })
-      function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+      const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        try {
+          await registerUser(values.email, values.password)  
+          router.push("/todo") 
+        } catch (error) {
+          console.error("Kayıt hatası:", error)
+        }
       }
 
 
@@ -91,6 +98,7 @@ const RegisterForm = () => {
             )}
             />
             <Button type="submit">Sign Up</Button>
+            <Button onClick={handleGoogleLogin}>Sign in with google</Button>
             <div className='flex gap-2 items-center justify-items-center'><p>You already have an account?</p> 
             <Link className='hover:bg-slate-800 border rounded-md border-white bg-slate-950 text-white p-1' href='/login'>Sign In</Link></div>
         </form>
