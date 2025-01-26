@@ -32,10 +32,14 @@ import {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       return result.user;
-    } catch (error) {
-      console.error("Google ile giriş sırasında hata:", error);
-      throw error;
-    }
+    } catch (error: any) {
+        if (error.code === 'auth/cancelled-popup-request') {
+          console.log("Kullanıcı işlemi iptal etti");
+        } else {
+          console.error("Google giriş hatası:", error);
+        }
+    } 
+      
   };
   
   export const logoutUser = async () => {

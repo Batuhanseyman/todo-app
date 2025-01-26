@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { useRouter } from 'next/navigation'
+import {loginUser, loginWithGoogle} from '@/firebase/firebaseAuthService'
 import {
   Form,
   FormControl,
@@ -37,10 +38,24 @@ const LoginForm = () => {
             password: ""
           },
         })
-        function onSubmit(values: z.infer<typeof formSchema>) {
-          // Do something with the form values.
-          // ✅ This will be type-safe and validated.
-          console.log(values)
+
+        const onSubmit = async (values: z.infer<typeof formSchema>) => {
+          try {
+            await loginUser(values.username, values.password) 
+            console.log("Giriş başarılı!")
+            router.push("/todo")  
+
+          } catch (error) {
+            console.error("Giriş hatası:", error)
+          }
+        }
+        const handleGoogleLogin = async () => {
+          try {
+            await loginWithGoogle() 
+            router.push("/todo")  
+          } catch (error) {
+            console.error("Google giriş hatası:", error)
+          }
         }
   
   return (
@@ -78,7 +93,8 @@ const LoginForm = () => {
                 </FormItem>
             )}
             />
-            <Button type="submit" onClick={() => router.push("/todo")}>Sign in</Button>
+            <Button type="submit">Sign in</Button>
+            <Button onClick={handleGoogleLogin}>Sign in with google</Button>
             <div className='flex gap-2 items-center justify-items-center'><p>Create an account</p> 
             <Link className='hover:bg-slate-800 border rounded-md border-white bg-slate-950 text-white p-1' href='/register'>Sign up</Link></div>
         </form>

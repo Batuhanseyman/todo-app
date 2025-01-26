@@ -92,7 +92,7 @@ const RegisterForm = () => {
             />
             <Button type="submit">Sign Up</Button>
             <div className='flex gap-2 items-center justify-items-center'><p>You already have an account?</p> 
-            <Link className='hover:bg-slate-800 border rounded-md border-white bg-slate-950 text-white p-1' href={'/login'}>Sign In</Link></div>
+            <Link className='hover:bg-slate-800 border rounded-md border-white bg-slate-950 text-white p-1' href='/login'>Sign In</Link></div>
         </form>
         </Form>
     </div>
