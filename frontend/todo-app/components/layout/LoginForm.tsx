@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input"
 import Link from 'next/link'
 
 const formSchema = z.object({
-    username: z.string().min(2, {
+    email: z.string().min(2, {
       message: "Username must be at least 4 characters.",
     }),
     password: z.string().min(2, {
@@ -34,14 +34,14 @@ const LoginForm = () => {
       const form = useForm<z.infer<typeof formSchema>>({
           resolver: zodResolver(formSchema),
           defaultValues: {
-            username: "",
+            email: "",
             password: ""
           },
         })
 
         const onSubmit = async (values: z.infer<typeof formSchema>) => {
           try {
-            await loginUser(values.username, values.password) 
+            await loginUser(values.email, values.password) 
             console.log("Giriş başarılı!")
             router.push("/todo")  
 
@@ -69,12 +69,12 @@ const LoginForm = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex flex-col">
           <FormField
             control={form.control}
-            name="username"
+            name="email"
             render={({ field }) => (
                 <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
-                    <Input placeholder="username" {...field} />
+                    <Input placeholder="username@example.com" {...field} />
                 </FormControl>
                 <FormMessage />
                 </FormItem>
