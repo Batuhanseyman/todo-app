@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { FirebaseError } from "firebase/app";
 
 // Zod şeması
 const formSchema = z
@@ -84,12 +85,20 @@ const RegisterForm = () => {
   };
 
   const handleGoogleLogin = async () => {
-    try {
-      await loginWithGoogle() 
-      router.push("/todo")  
-    } catch (error) {
-      console.error("Google login error!:", error)
-    }
+          setError(null)
+          setLoading(true)
+          try {
+            const user = await loginWithGoogle()
+            if (user) {
+              router.push("/todo")
+            }
+          } catch (err) {
+            if (err instanceof FirebaseError) {
+              setError("Google sign-in was canceled or failed.")
+            }
+          } finally {
+            setLoading(false)
+          }
   }
 
   return (
