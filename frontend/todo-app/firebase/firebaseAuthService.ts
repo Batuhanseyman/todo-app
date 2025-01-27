@@ -33,11 +33,12 @@ import {
       const result = await signInWithPopup(auth, provider);
       return result.user;
     } catch (error: any) {
-        if (error.code === 'auth/cancelled-popup-request') {
-          console.log("Kullanıcı işlemi iptal etti");
+        if (error.code === 'auth/cancelled-popup-request'|| error.code === "auth/popup-closed-by-user") {
+          console.log("User canceled the process");
         } else {
-          console.error("Google giriş hatası:", error);
+          console.error("Google sign-in error:", error);
         }
+        throw error;
     } 
       
   };
