@@ -15,11 +15,11 @@ const Navbar = () => {
   const handleSignOut = async () => {
     try {
       await logoutUser(); 
-      console.log("Kullanıcı çıkışı başarılı.");
+      console.log("Sign-out successful.");
       router.push("/login");
 
     } catch (error) {
-      console.error("Çıkış hatası:", error);
+      console.error("Sign-out Error:", error);
     }
   };
 

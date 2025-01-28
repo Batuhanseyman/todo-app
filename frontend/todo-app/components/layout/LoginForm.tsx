@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input"
 import Link from 'next/link'
 import { FirebaseError } from 'firebase/app'
 import { useState } from 'react'
-
+import { FcGoogle } from "react-icons/fc";
 
 const formSchema = z.object({
     email: z.string().min(12, {
@@ -139,6 +139,7 @@ const LoginForm = () => {
         </form>
         </Form>
         <Button onClick={handleGoogleLogin} disabled = {loading} className='mt-4'>
+        <FcGoogle size={20} />
           {loading ? "Loading..." : "Sign in with Google"}
           </Button>
             <div className='flex gap-2 items-center justify-items-center mt-4'><p>Create an account</p> 

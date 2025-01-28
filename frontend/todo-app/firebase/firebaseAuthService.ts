@@ -12,7 +12,7 @@ import {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       return userCredential.user;
     } catch (error) {
-      console.error("Kayıt sırasında hata:", error);
+      console.error("Error during register:", error);
       throw error;
     }
   };
@@ -22,7 +22,7 @@ import {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       return userCredential.user;
     } catch (error) {
-      console.error("Giriş sırasında hata:", error);
+      console.error("Error during login:", error);
       throw error;
     }
   };
@@ -47,7 +47,7 @@ import {
     try {
       await signOut(auth);
     } catch (error) {
-      console.error("Çıkış sırasında hata:", error);
+      console.error("Error during sign-out:", error);
       throw error;
     }
   };

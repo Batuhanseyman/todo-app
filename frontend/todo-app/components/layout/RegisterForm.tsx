@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { FirebaseError } from "firebase/app";
+import { FcGoogle } from "react-icons/fc";
 
 // Zod şeması
 const formSchema = z
@@ -145,9 +146,10 @@ const RegisterForm = () => {
         </form>
       </Form>
 
-      <Button onClick={handleGoogleLogin} className="mt-4">
-        Sign in with Google
-      </Button>
+        <Button onClick={handleGoogleLogin} disabled = {loading} className='mt-4'>
+        <FcGoogle size={20} />
+          {loading ? "Loading..." : "Sign in with Google"}
+          </Button>
 
       <div className="flex gap-2 items-center justify-items-center mt-4">
         <p>You already have an account?</p>
