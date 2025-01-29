@@ -13,4 +13,4 @@ build/
 .env.local
 .env.development
 .env.test
-.env.productio
+.env.production
