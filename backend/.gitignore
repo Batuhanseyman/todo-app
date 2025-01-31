@@ -1,0 +1,16 @@
+node_modules/
+package-lock.json
+dist/
+
+
+build/
+*.js
+*.js.map
+*.d.ts
+
+
+.env
+.env.local
+.env.development
+.env.test
+.env.production
