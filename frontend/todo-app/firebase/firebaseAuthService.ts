@@ -3,13 +3,18 @@ import {
     signInWithEmailAndPassword, 
     signOut, 
     GoogleAuthProvider, 
-    signInWithPopup 
+    signInWithPopup,
+    getIdToken 
   } from "firebase/auth";
   import { auth } from "./firebaseConfig";
+import {setSessionCookie, removeSessionCookie } from "@/lib/cookies";
   
   export const registerUser = async (email: string, password: string) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = userCredential.user.uid;
+      setSessionCookie(uid);
+
       return userCredential.user;
     } catch (error) {
       console.error("Error during register:", error);
@@ -20,6 +25,10 @@ import {
   export const loginUser = async (email: string, password: string) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const uid = userCredential.user.uid;
+  
+      setSessionCookie(uid);
+  
       return userCredential.user;
     } catch (error) {
       console.error("Error during login:", error);
@@ -31,6 +40,13 @@ import {
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
+    
+      if (!result.user) {
+        throw new Error("Google authentication failed: No user found");
+      }
+      const uid = result.user.uid;
+      setSessionCookie(uid);
+      
       return result.user;
     } catch (error: any) {
         if (error.code === 'auth/cancelled-popup-request'|| error.code === "auth/popup-closed-by-user") {
@@ -46,6 +62,7 @@ import {
   export const logoutUser = async () => {
     try {
       await signOut(auth);
+      removeSessionCookie();
     } catch (error) {
       console.error("Error during sign-out:", error);
       throw error;
