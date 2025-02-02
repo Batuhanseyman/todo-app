@@ -1,16 +1,18 @@
 "use client";
 import Link from 'next/link'
-import React, { useState} from 'react'
+import React, { useContext, useState} from 'react'
 import { Button } from '../ui/button'
 import { logoutUser } from '@/firebase/firebaseAuthService'
 import { useRouter } from 'next/navigation';
 import useAuth from '@/hooks/useAuth'
+import { AuthContext } from '@/context/authProvider';
 
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const {user, loading} = useAuth();
+  // const {user, loading} = useAuth();
+  const {user, loading} = useContext(AuthContext);
 
   const handleSignOut = async () => {
     try {
