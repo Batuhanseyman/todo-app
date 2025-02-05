@@ -1,6 +1,6 @@
 import React from "react";
 import "../globals.css";
-import { AuthProvider } from "@/context/authProvider";
+import { AuthProvider } from "@/providers/authProvider";
 
 export default function RootLayout ({ children }: { children: React.ReactNode }) {
     return (

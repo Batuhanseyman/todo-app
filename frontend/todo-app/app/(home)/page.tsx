@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 export default function Home()  {
@@ -9,7 +8,6 @@ export default function Home()  {
           <Link href='/login' className="border rounded-lg text-lg bg-gray-600 text-white p-2 w-24 text-center hover:bg-gray-700">Sign In</Link>
           <Link href='/register' className="border rounded-lg text-lg bg-gray-600 text-white p-2  w-24 text-center hover:bg-gray-700">Sign Up</Link>
         </div>
-
     </div>
   
   );
