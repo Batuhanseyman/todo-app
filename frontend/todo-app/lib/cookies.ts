@@ -1,21 +1,23 @@
-import { strict } from "assert";
-import nookies from "nookies";
+import { parseCookies, setCookie, destroyCookie } from "nookies";
 
 
 export const setSessionCookie = (uid: string) => {
-  nookies.set(null, "user_session", uid, {
-    maxAge: 60 * 60 * 24 * 7, 
+  setCookie(null, "user_session", uid, {
+    maxAge: 7 * 24 * 60 * 60, // 7 gün
     path: "/", 
-    secure: process.env.NODE_ENV === "production",
+    secure: true, 
+    sameSite: "Lax", 
     httpOnly: false, 
   });
 };
 
-export const removeSessionCookie = () => {
-  nookies.destroy(null, "user_session", {path: "/"});
+
+export const getSessionCookie = (): string | null => {
+  const cookies = parseCookies();
+  console.log("Çerezler:", cookies);
+  return cookies.user_session || null;
 };
 
-export const getSessionCookie = () => {
-  const cookies = nookies.get(null);
-  return cookies.user_session || null;
+export const removeSessionCookie = () => {
+  destroyCookie(null, "user_session", { path: "/" });
 };
