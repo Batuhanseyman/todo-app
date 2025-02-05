@@ -4,7 +4,7 @@ import  authMiddleware  from '../middlewares/authMiddleware';
 
 const router = express.Router();
 
-router.get( "/", authMiddleware, TodoController.getUserTodos);
+router.get( "/:id", authMiddleware, TodoController.getUserTodos);
 router.post( "/", authMiddleware, TodoController.addTodo);
 
 router.put("/:id", authMiddleware, TodoController.updateUserTodo)
