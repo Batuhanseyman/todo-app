@@ -26,7 +26,8 @@ export const addTodo = async (req: Request, res: Response): Promise<void> => {
 
   export const getUserTodos = async (req: Request, res: Response): Promise<void> => {
     try {
-      const todos = await getTodos(req.body.userId);
+      const {id} = req.params;
+      const todos = await getTodos(id);
       const response = new ResponseModel(true, todos, "Todos fetching successfully", new Date());
 
       responseHelper.httpOk(res, response);
