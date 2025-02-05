@@ -4,8 +4,7 @@ import React, { useContext, useState} from 'react'
 import { Button } from '../ui/button'
 import { logoutUser } from '@/firebase/firebaseAuthService'
 import { useRouter } from 'next/navigation';
-import useAuth from '@/hooks/useAuth'
-import { AuthContext } from '@/context/authProvider';
+import { AuthContext } from '@/providers/authProvider';
 
 
 const Navbar = () => {
@@ -35,6 +34,7 @@ const Navbar = () => {
       <div className= {`${isOpen ? 'flex' : 'hidden'} flex-col md:flex-row md:block`}>
         {user ? (
           <>
+          <Link href='/todo' className='mx-2 hover:text-gray-300'>Go Todos</Link>
             <Button className="border rounded-lg bg-red-600 text-center p-2 
           text-white hover:bg-red-700" onClick={handleSignOut}>Sign Out</Button>
           </>          
