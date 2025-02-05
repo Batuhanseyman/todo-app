@@ -20,10 +20,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUID = getSessionCookie(); // ✅ Çerezden UID'yi al
-
+    const storedUID = getSessionCookie();
     if (storedUID) {
-      setUser({ uid: storedUID } as User); // ✅ Çerezde UID varsa user objesi oluştur
+      setUser({ uid: storedUID } as User);
       setLoading(false);
       return;
     }
