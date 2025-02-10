@@ -23,7 +23,6 @@ import { FirebaseError } from "firebase/app";
 import { FcGoogle } from "react-icons/fc";
 import { addLocalTodosToBackend } from "@/services/localTodoService";
 
-// Zod şeması
 const formSchema = z
   .object({
     email: z
@@ -39,9 +38,6 @@ const formSchema = z
         path: ["email"],
       }),
 
-    username: z.string().min(2, {
-      message: "Username must be at least 4 characters.",
-    }),
     password: z.string().min(6, {
       message: "Password must be at least 6 characters.",
     }),
@@ -49,7 +45,7 @@ const formSchema = z
   .superRefine(({ email, password }, ctx) => {
     if (!email || !password) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,  // Zod hata kodu eklendi
+        code: z.ZodIssueCode.custom,  
         path: ["email"],
         message: "Email and password are required",
       });
@@ -65,7 +61,6 @@ const RegisterForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      username: "",
       password: "",
     },
   });
@@ -125,18 +120,7 @@ const RegisterForm = () => {
               </FormControl>
               <FormMessage />
             </FormItem>
-          )} />
-          
-          <FormField control={form.control} name="username" render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="username" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )} />
-          
+          )} />   
           <FormField control={form.control} name="password" render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
