@@ -1,53 +1,76 @@
 "use client"
-import React from 'react'
+import React, { useContext } from 'react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import TodoItem, { Todo } from './TodoItem'
 import { useState, useEffect } from 'react'
 import { addTodo, getTodos } from '@/services/todoService'
 import { getSessionCookie } from '@/lib/cookies'
+import { AuthContext } from '@/providers/authProvider';
+import { getRequestCounts } from '@/services/requestCounterService'
+import { addLocalTodo, getLocalTodos } from '@/services/localTodoService'
 
 
 const TodoCard = () => {
-
+  const {user, loading} = useContext(AuthContext);
   const [todos, setTodos] =  useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState("");
 
   useEffect (() => {
-    if(getSessionCookie() == null) return;
-
     const fetchTodos = async () => {
       const fetchedTodos = await getTodos();
-      console.log(fetchedTodos.data);
-      setTodos(fetchedTodos.data);
+      if(fetchedTodos.success)
+      {
+        setTodos(fetchedTodos.data);
+      }
     }
-    fetchTodos();
-  });
+
+    if(user) {
+      fetchTodos();
+    }
+    else{
+      const todos = getLocalTodos();
+      setTodos(todos)
+    }
+    
+  },[loading]);
 
   const handleAddTodo = async () => {
     if (!newTodo.trim()) return;
 
-    const response = await addTodo(newTodo);
-    if(response.success){
-      setTodos((prevTodos) => [...prevTodos, response.data]);
-      setNewTodo("");
+    if (user)
+    {
+      const response = await addTodo(newTodo);
+      if(response.success){
+        setTodos((prevTodos) => [...prevTodos, response.data]);
+        setNewTodo("");
+      }
+    }
+    else {
+      const addedTodo = addLocalTodo(newTodo);
+      if(addedTodo){
+        setTodos((prevTodos) => [...prevTodos, addedTodo]);
+        setNewTodo("");
+      }
+
     }
   }
 
   const handleDelete = (todoId: string) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== todoId));
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.todoId !== todoId));
   }
 
 
   const handleUpdate = (updatedTodo: Todo) => {
     setTodos((prevTodos) =>
-      prevTodos.map((todo) => (todo._id === updatedTodo._id ? updatedTodo : todo))
+      prevTodos.map((todo) => (todo.todoId === updatedTodo.todoId ? updatedTodo : todo))
     );
-  }
+
+  };
 
   return (
-
-<div className="bg-white  shadow-lg  border-solid rounded-3xl w-full md:w-1/3 p-16  flex flex-col  lg:mt-24 items-center content-center">
+    loading ? (<div className='flex items-center justify-center text-2xl text-white'><p>Loading...</p></div>):
+(<div className="bg-white  shadow-lg  border-solid rounded-3xl w-full md:w-5/12 p-16  flex flex-col  lg:mt-24 items-center content-center">
     <h1 className="text-3xl font-bold text-center
     text-gray-900 mb-6">Todo List</h1>
     <div className="mb-4 flex">
@@ -58,7 +81,7 @@ const TodoCard = () => {
             px-4 py-2 rounded-r-2xl hover:bg-blue-600">Add</Button>
     </div>
     <TodoItem toDos = {todos} onDelete = {handleDelete} onUpdate={handleUpdate}></TodoItem>
-  </div>
+  </div>)
   )
 }
 
