@@ -1,4 +1,6 @@
 import { getSessionCookie } from "@/lib/cookies";
+import axios from "axios";
+import { Todo } from "@/components/todo/TodoItem";
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URI; 
 
@@ -9,16 +11,14 @@ export const getTodos = async () => {
     
     if (!uid) throw new Error("No session found");
 
-    const response = await fetch(`${API_URL}/${uid}`, {
-      method: "GET",
+    const response = await axios.get(`${API_URL}/todos/${uid}`, {
       headers: {
         "Content-Type": "application/json",
-        "userid": `${uid}`
+        "userid": `${uid}`,
       },
     });
 
-    if (!response.ok) throw new Error("Failed to fetch todos");
-    return await response.json();
+    return  response.data
   } catch (error) {
     console.error("Error fetching todos:", error);
     return [];
@@ -30,39 +30,42 @@ export const addTodo = async (todoText: string) => {
     const uid = getSessionCookie();
     if (!uid) throw new Error("No session found");
 
-    const response = await fetch(`${API_URL}/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "userid": `${uid}`
-      },
-      body: JSON.stringify({ userId: uid, todo: todoText, selected: false }),
-    });
+    const response = await axios.post(
+      `${API_URL}/todos/`,
+      { todo: todoText, selected: false },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "userid": `${uid}`,
+        },
+      }
+    );
 
-    if (!response.ok) throw new Error("Failed to add todo");
-    return await response.json();
+    return response.data;
   } catch (error) {
     console.error("Error adding todo:", error);
   }
 };
 
 
-export const updateTodo = async (todoId: string, todoText: string, selected: boolean) => {
+export const updateTodo = async (todo: Todo) => {
   try {
     const uid = getSessionCookie();
     if (!uid) throw new Error("No session found");
 
-    const response = await fetch(`${API_URL}/${todoId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "userid": `${uid}`
-      },
-      body: JSON.stringify({ todo: todoText, selected: selected }),
-    });
 
-    if (!response.ok) throw new Error("Failed to update todo");
-    return await response.json();
+    const response = await axios.put(
+      `${API_URL}/todos/${todo.todoId}`,
+      { todo: todo.todo, selected: todo.selected },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "userid": `${uid}`,
+        },
+      }
+    );
+
+    return response.data;
   } catch (error) {
     console.error("Error updating todo:", error);
   }
@@ -73,16 +76,16 @@ export const deleteTodo = async (todoId: string) => {
     const uid = getSessionCookie();
     if (!uid) throw new Error("No session found");
 
-    const response = await fetch(`${API_URL}/${todoId}`, {
-      method: "DELETE",
+    const response = await axios.delete(`${API_URL}/todos/${todoId}`, {
       headers: {
-        "userid": `${uid}`
+        "userid": `${uid}`,
       },
     });
 
-    if (!response.ok) throw new Error("Failed to delete todo");
-    return await response.json();
+    return response.data;
   } catch (error) {
     console.error("Error deleting todo:", error);
   }
 };
+
+
