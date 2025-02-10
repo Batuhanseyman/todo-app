@@ -32,12 +32,19 @@ const Navbar = () => {
 
         <div className="hidden md:flex space-x-4">
           {user ? (
-            <Button
-              className="border rounded-lg bg-red-600 px-4 py-2 hover:bg-red-700"
-              onClick={handleSignOut}
-            >
-              Sign Out
-            </Button>
+            <>
+            <div className="hover:text-gray-300 py-2">
+              <Link href="/user-profile">
+                Profile
+              </Link>
+            </div>
+              <Button
+                className="border rounded-lg bg-red-600 px-4 py-2 hover:bg-red-700"
+                onClick={handleSignOut}
+              >
+                Sign Out
+              </Button>
+          </>
           ) : (
             <>
               <Link href="/login" className="hover:text-gray-300">
@@ -57,7 +64,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobil Menü Açılır-Kapanır */}
 
     </nav>
           <div
@@ -66,12 +72,19 @@ const Navbar = () => {
           } md:hidden flex flex-col items-center bg-gray-800 py-4 space-y-4 text-white`}
         >
           {user ? (
-            <Button
-              className="border rounded-lg bg-red-600 px-4 py-2 hover:bg-red-700"
-              onClick={handleSignOut}
-            >
-              Sign Out
-            </Button>
+            <>
+              <div className="hover:text-gray-300">
+                <Link href="/user-profile">
+                  Profile
+                </Link>
+              </div>
+                <Button
+                  className="border rounded-lg bg-red-600 px-4 py-2 hover:bg-red-700"
+                  onClick={handleSignOut}
+                >
+                  Sign Out
+                </Button>
+            </>
           ) : (
             <>
             <div className="hover:text-gray-300">
