@@ -4,7 +4,9 @@ import {
     signOut, 
     GoogleAuthProvider, 
     signInWithPopup,
-    getIdToken 
+    getIdToken,
+    User ,
+    onAuthStateChanged
   } from "firebase/auth";
   import { auth } from "./firebaseConfig";
 import {setSessionCookie, removeSessionCookie } from "@/lib/cookies";
@@ -69,3 +71,19 @@ import {setSessionCookie, removeSessionCookie } from "@/lib/cookies";
     }
   };
   
+  export const listenAuthChanges = (callback: (user: User | null) => void) => {
+    return onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setSessionCookie(currentUser.uid);
+        callback({
+          uid: currentUser.uid,
+          displayName: currentUser.displayName,
+          photoURL: currentUser.photoURL,
+          email: currentUser.email
+        } as User);
+      } else {
+        removeSessionCookie();
+        callback(null);
+      }
+    });
+  }

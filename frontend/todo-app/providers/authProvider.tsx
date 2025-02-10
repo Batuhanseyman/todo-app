@@ -1,9 +1,9 @@
 "use client";
 
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { User, onAuthStateChanged, getAuth  } from "firebase/auth";
-import {auth} from "@/firebase/firebaseConfig"
-import { setSessionCookie, getSessionCookie, removeSessionCookie } from "@/lib/cookies";
+import { User } from "firebase/auth";
+import { getSessionCookie} from "@/lib/cookies";
+import { listenAuthChanges } from "@/firebase/firebaseAuthService";
 
 interface AuthContextType {
   user: User | null;
@@ -26,18 +26,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
       return;
     }
-    const unsubscribe = onAuthStateChanged(auth, async(currentUser) => {
-    //   setUser(currentUser);
-    //   setLoading(false);
-    if (currentUser) {
-        setSessionCookie(currentUser.uid); 
-        setUser(currentUser);
-      } else {
-        removeSessionCookie(); 
-        setUser(null);
-      }
-      setLoading(false);
-    });
+
+    const unsubscribe = listenAuthChanges(setUser);
+
+    setLoading(false);
 
     return () => unsubscribe();
   }, []);
