@@ -70,7 +70,7 @@ const TodoCard = () => {
 
   return (
     loading ? (<div className='flex items-center justify-center text-2xl text-white'><p>Loading...</p></div>):
-(<div className="bg-white  shadow-lg  border-solid rounded-3xl w-full md:w-5/12 p-16  flex flex-col  lg:mt-24 items-center content-center">
+(<div className="bg-white  shadow-lg  border-solid rounded-3xl w-full md:w-9/12 lg:w-6/12 p-16  flex flex-col  lg:mt-24 items-center content-center">
     <h1 className="text-3xl font-bold text-center
     text-gray-900 mb-6">Todo List</h1>
     <div className="mb-4 flex">
