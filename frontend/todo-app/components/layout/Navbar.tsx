@@ -10,8 +10,7 @@ import { AuthContext } from '@/providers/authProvider';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  // const {user, loading} = useAuth();
-  const {user, loading} = useContext(AuthContext);
+  const {user} = useContext(AuthContext);
 
   const handleSignOut = async () => {
     try {
@@ -34,7 +33,6 @@ const Navbar = () => {
       <div className= {`${isOpen ? 'flex' : 'hidden'} flex-col md:flex-row md:block`}>
         {user ? (
           <>
-          <Link href='/todo' className='mx-2 hover:text-gray-300'>Go Todos</Link>
             <Button className="border rounded-lg bg-red-600 text-center p-2 
           text-white hover:bg-red-700" onClick={handleSignOut}>Sign Out</Button>
           </>          
