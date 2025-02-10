@@ -30,7 +30,6 @@ const Navbar = () => {
           TODO APP
         </Link>
 
-        {/* Desktop Menü */}
         <div className="hidden md:flex space-x-4">
           {user ? (
             <Button
@@ -51,7 +50,6 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobil Menü Butonu */}
         <div className="md:hidden">
           <Button onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <X size={24} /> : <Menu size={24} />}
