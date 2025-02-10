@@ -14,7 +14,6 @@ export const setSessionCookie = (uid: string) => {
 
 export const getSessionCookie = (): string | null => {
   const cookies = parseCookies();
-  console.log("Çerezler:", cookies);
   return cookies.user_session || null;
 };
 
