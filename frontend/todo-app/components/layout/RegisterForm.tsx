@@ -8,6 +8,7 @@ import { registerUser, loginWithGoogle } from "@/firebase/firebaseAuthService";
 import { useRouter } from "next/navigation";
 import { fetchSignInMethodsForEmail } from "firebase/auth";
 import { auth } from "@/firebase/firebaseConfig";
+import {registerUserMongo} from '@/services/registerService'
 import {
   Form,
   FormControl,
@@ -20,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { FirebaseError } from "firebase/app";
 import { FcGoogle } from "react-icons/fc";
+import { addLocalTodosToBackend } from "@/services/localTodoService";
 
 // Zod şeması
 const formSchema = z
@@ -68,12 +70,16 @@ const RegisterForm = () => {
     },
   });
 
-  // Form gönderimi
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
-      await registerUser(values.email, values.password);
-      router.push("/todo");
+      
+      const user = await registerUser(values.email, values.password);
+      await registerUserMongo(user.uid);
+      await addLocalTodosToBackend(user.uid);
+      router.push("/");
+
     } catch (error: any) {
       if (error.code === "auth/email-already-in-use") {
         setError("This email is already in use");
@@ -91,7 +97,8 @@ const RegisterForm = () => {
           try {
             const user = await loginWithGoogle()
             if (user) {
-              router.push("/todo")
+              await addLocalTodosToBackend(user.uid);
+              router.push("/")
             }
           } catch (err) {
             if (err instanceof FirebaseError) {

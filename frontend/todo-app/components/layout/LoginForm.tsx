@@ -20,6 +20,7 @@ import Link from 'next/link'
 import { FirebaseError } from 'firebase/app'
 import { useState } from 'react'
 import { FcGoogle } from "react-icons/fc";
+import { addLocalTodosToBackend } from '@/services/localTodoService'
 
 const formSchema = z.object({
     email: z.string().min(12, {
@@ -48,8 +49,12 @@ const LoginForm = () => {
           setError(null)
           setLoading(true)
           try {
-            await loginUser(values.email, values.password)
-            router.push("/todo")
+            const user = await loginUser(values.email, values.password)
+            if(user)
+            {
+              await addLocalTodosToBackend(user.uid);
+              router.push("/")
+            }
           } catch (err) {
             if (err instanceof FirebaseError) {
               switch (err.code) {
@@ -83,7 +88,8 @@ const LoginForm = () => {
           try {
             const user = await loginWithGoogle()
             if (user) {
-              router.push("/todo")
+              router.push("/");
+              await addLocalTodosToBackend(user.uid);
             }
           } catch (err) {
             if (err instanceof FirebaseError) {
