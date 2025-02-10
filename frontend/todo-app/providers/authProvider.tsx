@@ -19,17 +19,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // useEffect(() => {
+  //   const storedUID = getSessionCookie();
+  //   if (storedUID) {
+  //     setUser({ uid: storedUID } as User);
+  //     setLoading(false);
+  //     return;
+  //   }
+
+  //   const unsubscribe = listenAuthChanges(setUser);
+
+  //   setLoading(false);
+
+  //   return () => unsubscribe();
+  // }, []);
   useEffect(() => {
-    const storedUID = getSessionCookie();
-    if (storedUID) {
-      setUser({ uid: storedUID } as User);
+    const unsubscribe = listenAuthChanges((currentUser) => {
+      setUser(currentUser); // Firebase'den gelen user bilgisini kaydediyoruz
       setLoading(false);
-      return;
-    }
-
-    const unsubscribe = listenAuthChanges(setUser);
-
-    setLoading(false);
+    });
 
     return () => unsubscribe();
   }, []);
