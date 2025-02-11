@@ -53,6 +53,13 @@ MONGO_URI=mongodb://localhost:27017/todo
 PORT=8080
 ```
 
+
+To properly authenticate Firebase on the backend, download your Firebase Admin SDK JSON file from the Firebase Console and place it inside the backend directory at:
+```
+backend/src/configs/firebase/serviceAccountKey.json
+```
+This file is required for Firebase authentication and should not be committed to version control.
+
 ### Install Dependencies
 #### Frontend
 ```sh
@@ -79,25 +86,25 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## API Endpoints
+
 ### Authentication
-| Method | Endpoint          | Description            |
-|--------|------------------|------------------------|
-| POST   | `/auth/login`    | User login             |
-| POST   | `/auth/logout`   | User logout            |
+| Method | Endpoint        | Description                      |
+|--------|----------------|----------------------------------|
+| GET    | `/api/register/`    | Pair backend with Firebase |
 
 ### Todos
 | Method | Endpoint         | Description            |
 |--------|-----------------|------------------------|
-| GET    | `/todos`        | Fetch user todos       |
-| POST   | `/todos`       | Create a new todo      |
-| PUT    | `/todos/:id`    | Update a todo         |
-| DELETE | `/todos/:id`   | Delete a todo         |
+| GET    | `/api/todos/:id`        | Fetch user todos       |
+| POST   | `/api/todos/`       | Create a new todo      |
+| POST   | `/api/todos/insert-many`       | Create a many new todos      |
+| PUT    | `/api/todos/:id`    | Update a todo         |
+| DELETE | `/api/todos/:id`   | Delete a todo         |
 
 ### Profile
 | Method | Endpoint        | Description                      |
 |--------|----------------|----------------------------------|
-| GET    | `/profile`     | Fetch user profile details       |
-| GET    | `/requests`    | Fetch API request count per user |
+| GET    | `/api/requestcounts/:id`    | Fetch API request count per user |
 
 ## Screenshots
 ### Home Page
