@@ -8,6 +8,7 @@ import { registerUser, loginWithGoogle } from "@/firebase/firebaseAuthService";
 import { useRouter } from "next/navigation";
 import { fetchSignInMethodsForEmail } from "firebase/auth";
 import { auth } from "@/firebase/firebaseConfig";
+import {registerUserMongo} from '@/services/registerService'
 import {
   Form,
   FormControl,
@@ -20,8 +21,8 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { FirebaseError } from "firebase/app";
 import { FcGoogle } from "react-icons/fc";
+import { addLocalTodosToBackend } from "@/services/localTodoService";
 
-// Zod şeması
 const formSchema = z
   .object({
     email: z
@@ -37,9 +38,6 @@ const formSchema = z
         path: ["email"],
       }),
 
-    username: z.string().min(2, {
-      message: "Username must be at least 4 characters.",
-    }),
     password: z.string().min(6, {
       message: "Password must be at least 6 characters.",
     }),
@@ -47,7 +45,7 @@ const formSchema = z
   .superRefine(({ email, password }, ctx) => {
     if (!email || !password) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,  // Zod hata kodu eklendi
+        code: z.ZodIssueCode.custom,  
         path: ["email"],
         message: "Email and password are required",
       });
@@ -63,17 +61,20 @@ const RegisterForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      username: "",
       password: "",
     },
   });
 
-  // Form gönderimi
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
-      await registerUser(values.email, values.password);
-      router.push("/todo");
+      
+      const user = await registerUser(values.email, values.password);
+      await registerUserMongo(user.uid);
+      await addLocalTodosToBackend(user.uid);
+      router.push("/");
+
     } catch (error: any) {
       if (error.code === "auth/email-already-in-use") {
         setError("This email is already in use");
@@ -91,7 +92,8 @@ const RegisterForm = () => {
           try {
             const user = await loginWithGoogle()
             if (user) {
-              router.push("/todo")
+              await addLocalTodosToBackend(user.uid);
+              router.push("/")
             }
           } catch (err) {
             if (err instanceof FirebaseError) {
@@ -118,18 +120,7 @@ const RegisterForm = () => {
               </FormControl>
               <FormMessage />
             </FormItem>
-          )} />
-          
-          <FormField control={form.control} name="username" render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="username" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )} />
-          
+          )} />   
           <FormField control={form.control} name="password" render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>

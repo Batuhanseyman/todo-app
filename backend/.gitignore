@@ -8,6 +8,7 @@ build/
 *.js.map
 *.d.ts
 
+serviceAccountKey.json
 
 .env
 .env.local
